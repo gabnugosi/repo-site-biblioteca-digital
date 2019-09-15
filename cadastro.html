@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="bootstrapBiblioteca.css">
+	 <link rel="stylesheet" type="text/css" href="style.css">
+    <title> Cadastro </title>
+</head>
+
+<body background="biblioteca.jpg">
+    <!-- Adicionando JQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+
+    <!-- Adicionando Javascript -->
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            function limpa_formulário_cep() {
+                // Limpa valores do formulário de cep.
+                $("#rua").val("");
+                $("#bairro").val("");
+                $("#cidade").val("");
+                $("#uf").val("");
+
+            }
+
+            //Quando o campo cep perde o foco.
+            $("#cep").blur(function () {
+
+                //Nova variável "cep" somente com dígitos.
+                var cep = $(this).val().replace(/\D/g, '');
+
+                //Verifica se campo cep possui valor informado.
+                if (cep != "") {
+
+                    //Expressão regular para validar o CEP.
+                    var validacep = /^[0-9]{8}$/;
+
+                    //Valida o formato do CEP.
+                    if (validacep.test(cep)) {
+
+                        //Preenche os campos com "..." enquanto consulta serviços web
+                        $("#rua").val("...");
+                        $("#bairro").val("...");
+                        $("#cidade").val("...");
+                        $("#uf").val("...");
+
+
+                        //Consulta o serviço web viacep.com.br/
+                        $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+
+                            if (!("erro" in dados)) {
+                                //Atualiza os campos com os valores da consulta.
+                                $("#rua").val(dados.logradouro);
+                                $("#bairro").val(dados.bairro);
+                                $("#cidade").val(dados.localidade);
+                                $("#uf").val(dados.uf);
+
+                            } //Fim if.
+                            else {
+                                //CEP pesquisado não foi encontrado.
+                                limpa_formulário_cep();
+                                alert("CEP não encontrado.");
+                            }
+                        });
+                    } //Fim if.
+                    else {
+                        //cep é inválido.
+                        limpa_formulário_cep();
+                        alert("Formato de CEP inválido.");
+                    }
+                } //Fim if.
+                else {
+                    //cep sem valor, limpa formulário.
+                    limpa_formulário_cep();
+                }
+            });
+        });
+        //validar se os campos não estão em branco
+        function validar_formulario() {
+            var nome = cadastro_formulario.nome.value;
+            var cep = cadastro_formulario.cep.value;
+            var endereço = cadastro_formulario.endereço.value;
+            var txtdata = cadastro_formulario.txtdata.value;
+            var numero = cadastro_formulario.numero.value;
+            var bairro = cadastro_formulario.bairro.value;
+            var uf = cadastro_formulario.uf.value;
+            var usrtel = cadastro_formulario.usrtel.value;
+            var usrcel = cadastro_formulario.usrcel.value;
+            var email = cadastro_formulario.email.value;
+            var cursos = cadastro_formulario.cursos.value;
+            var periodo = cadastro_formulario.periodo.value;
+            var senha = cadastro_formulario.senha.value;
+            var confisenha = cadastro_formulario.confisenha.value;
+
+            //
+            if (nome == "") {
+                alert("Campo nome é obrigatório.");
+                cadastro_formulario.nome.focus();// vai até o campo a ser preenchido
+                return false;
+            }
+            if (cep == "") {
+                alert("Campo cep é obrigatório.");
+                cadastro_formulario.cep.focus();
+                return false;
+            }
+            if (endereço == "") {
+                alert("Campo endereço é obrigatório.");
+                cadastro_formulario.endereço.focus();
+                return false;
+            }
+            if (txtdata == "") {
+                alert("Campo data de nascimento é obrigatório.");
+                cadastro_formulario.txtdata.focus();
+                return false;
+            }
+            if (numero == "") {
+                alert("Campo numero é obrigatório.");
+                cadastro_formulario.numero.focus();
+                return false;
+            }
+
+            if (bairro == "") {
+                alert("Campo bairro é obrigatório.");
+                cadastro_formulario.bairro.focus();
+                return false;
+            }
+            if (uf == "") {
+                alert("Campo uf é obrigatório.");
+                cadastro_formulario.uf.focus();
+                return false;
+            }
+            //indica que pelo menos 1 dos campos deve ser preenchido
+            if (usrtel == "" && usrcel == "") {
+                alert("Preencha dos campos de telefone");
+                cadastro_formulario.usrtel.focus();
+                return false;
+
+            }
+            if (email == "") {
+                alert("Campo email é obrigatório.");
+                cadastro_formulario.email.focus();
+                return false;
+            }
+            if (cursos == "") {
+                alert("Campo cursos é obrigatório.");
+                cadastro_formulario.cursos.focus();
+                return false;
+            }
+
+            if (periodo == "") {
+                alert("Campo periodo é obrigatório.");
+                cadastro_formulario.periodo.focus();
+                return false;
+            }
+
+            if (senha == "") {
+                alert("Campo senha é obrigatório.");
+                cadastro_formulario.senha.focus();
+                return false;
+            }
+
+            if (confisenha == "") {
+                alert("Campo confirmar senha é obrigatório.");
+                cadastro_formulario.confisenha.focus();
+                return false;
+            }
+            // verifica se a senha confirmar senha é igual a do campo senha
+            if (senha != confisenha) {
+                alert("Os campos senha e confirmar senha devem ser iguais!");
+                cadastro_formulario.confisenha.focus();
+                return false;
+            }
+        }
+    </script>
+
+
+    <div class="container">
+	
+        <form name="cadastro_formulario">
+            <h2>Meus dados:</h2><br><br>
+
+            Nome:
+            <input type="text" name="nome">
+            Data de Nascimento:
+            <input type="date" name="txtdata">
+            <br><br>
+
+            <label>CEP:
+                <input name="cep" type="text" id="cep" value="" size="10" maxlength="9" /></label>
+            <label>Endereço:
+                <input name="endereço" type="text" id="rua" size="40" /></label>
+
+            <label>Número:
+                <input name="numero" type="text" id="nro" size="5" /></label>
+            <label>Complemento:</label>
+            <input type="text" name="complto"><br><br>
+
+
+            <label>Bairro:
+                <input name="bairro" type="text" id="bairro" size="40" /></label>
+            <label>Cidade:
+                <input name="cidade" type="text" id="cidade" size="40" /></label>
+            <label>UF:
+                <input name="uf" type="text" id="uf" size="4" /></label><br><br>
+
+            Telefone:
+            <input type="tel" name="usrtel">
+            Cel:
+            <input type="tel" name="usrcel">
+            <br><br>
+            Email:
+            <input type="email" name="email">
+            Curso:
+            <select id="cursos" name="cursos">
+                <option></option>
+                <option value="Administração">Administração</option>
+                <option value="Contabilidade">Contabilidade</option>
+                <option value="Desenvolvimento de Sistemas">Desenvolvimento de Sistemas</option>
+                <option value="Eletrônica">Eletrônica</option>
+                <option value="Eletrotécnica">Eletrotécnica</option>
+                <option value="Logística">Logística</option>
+                <option value="Mecânica">Mecânica</option>
+                <option value="Mecatrônica">Mecatrônica</option>
+            </select>
+            Data de conclusão:
+            <input type="month" name="dtcls">
+            <br><br>
+            Periodo:
+            <select id="periodo" name="periodo">
+                <option></option>
+                <option value="Tarde">Tarde</option>
+                <option value="Noite">Noite</option>
+            </select>
+
+            Módulo:
+            <select id="modulo" name="modulo">
+                <option></option>
+                <option value="1">1º</option>
+                <option value="2">2º</option>
+                <option value="3">3º</option>
+            </select><br><br>
+
+            Senha:
+            <input type="password" id="senha" name="senha"><br><br>
+            Confirme a sua senha:
+            <input type="password" id="confisenha" name="confisenha"><br><br>
+
+            <input type="button" value="Cadastrar" name="btncadas" onclick="validar_formulario()">
+			 <input type="button" value="voltar" href = "index.html" >
+
+    </div>
+
+
+    </form>
+</body>
+
+</html>
