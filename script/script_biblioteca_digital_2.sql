@@ -133,14 +133,15 @@ CREATE TABLE moderador(
 );
 GO
 
-
 CREATE TABLE reserva(
 	id_reserva				INT 				NOT NULL	IDENTITY(1,1)	PRIMARY KEY,
 	dt_hora_reserva			SMALLDATETIME		NOT NULL,	
 	prazo_reserva			INT 				NOT NULL,
 	situacao_reserva		VARCHAR(12)			NOT NULL,
 	id_usu					INT					NOT NULL,
-	CONSTRAINT	id_usuario_reserva 	FOREIGN KEY (id_usu) REFERENCES usuario (id_usu)		
+	id_obra					INT					NOT NULL,
+	CONSTRAINT	id_usuario_reserva 	FOREIGN KEY (id_usu) REFERENCES usuario (id_usu),
+	CONSTRAINT	id_obra_reserva 	FOREIGN KEY (id_usu) REFERENCES obra (id_obra),			
 );
 GO
 
