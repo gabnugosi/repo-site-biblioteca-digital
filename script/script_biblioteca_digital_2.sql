@@ -154,3 +154,21 @@ CREATE TABLE pendencia(
 	CONSTRAINT	id_usuario_pendencia 	FOREIGN KEY (id_usu) REFERENCES usuario (id_usu)		
 );
 GO
+
+USE BDIGITAL_201902;
+
+alter table obra
+alter column descricao_obra varchar(1800) null;
+
+alter table obra
+alter column edicao_obra int null;
+
+alter table obra 
+alter column tombo varchar(5) null;
+
+alter table obra 
+alter column status_obra varchar(12) null;
+
+alter table obra 
+drop column qtd_pagina, genero, idioma;
+
